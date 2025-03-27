@@ -1,3 +1,4 @@
+import student
 
 def displayMenu():
     print("===========================SCHOOL MANAGEMENT SYSTEM===========================")
@@ -12,5 +13,20 @@ def displayMenu():
         try :
             a=int(input())
             #showMenu(a)
+            return
         except:
-            raiseException ValueError("Enter a valid number")
+            raise ValueError("Enter a valid number")
+    
+def showMenu(a):
+    match(a):
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            showMenuStudent(a)
+            break
+        case _:
+            break
+
+    return
