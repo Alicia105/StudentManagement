@@ -41,4 +41,4 @@ def checkEnteredNumberIsInt():
             x=int(input())
             return x
         except ValueError:
-            print("Enter a number")
+            print("Please enter a valid number")
