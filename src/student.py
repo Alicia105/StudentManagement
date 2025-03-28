@@ -49,7 +49,7 @@ def createStudent():
     #Create mail
     mail=name[0]+lastName+"@school.edu"
     student["mail"]=mail.lower()
-    print("----Your account was succesfully created----")
+    print("\n----Your account was succesfully created----")
     print(f"Your email is : {mail}")
     print(f"Your id is : {id}")
     print(f"Your password is : {password}")
@@ -75,10 +75,10 @@ def addStudent(listStudent,student):
 
 #Remove a student account to the list of existing student--good
 def deleteStudent(listStudent,id):
-    for student in listStudent:
-        if student.get("id")==id :
-            listStudent.remove(student)
-    return listStudent
+    newList = [student for student in listStudent if student.get("id") != id]
+    if len(newList) == len(listStudent):
+        print("Student not found.")  
+    return newList
 
 #Modify a student account--good
 def modifyStudent(student):
@@ -110,7 +110,7 @@ def modifyStudent(student):
             student["dateOfBirth"]=dateOfBirth
             
         case 5:
-            password=input("Enter your password :")
+            password=input("Enter your password :").strip()
             student["password"]=encrypt.encrypt(password)
 
         case 6:
@@ -220,7 +220,6 @@ def showStudentMenu(listStudent,listCourse):
         case 2 :
             student=createStudent()
             listStudent=addStudent(listStudent,student)
-            print(listStudent)
             return 0
         case 3:
             return 1
@@ -229,17 +228,4 @@ def showStudentMenu(listStudent,listCourse):
     
     return 0
         
-"""def main():
-    l=[]
-    lc=[]
-    c=course.createCourse()
-    lc=course.addCourse(lc,c)
-    s=createStudent()
-    l=addStudent(l,s)
-    while True:
-        showStudentMenu(l,lc)
 
-main()"""
-    
-
-    

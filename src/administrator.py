@@ -3,7 +3,7 @@ import encrypt
 import course
 import student
 
-#Create a new admin account
+#Create a new admin account--good
 def createAdmin():
     admin=dict()
 
@@ -28,7 +28,7 @@ def createAdmin():
     admin["startDate"]=startDate
 
     #Enter password
-    password=input("Enter your password :")
+    password=input("Enter your password :").strip()
 
     #Create id    
     r=random.randint(0,1000)
@@ -37,9 +37,9 @@ def createAdmin():
     
     #Create mail
     mail=name[0]+lastName+"@school.edu"
-    admin["mail"]=mail
+    admin["mail"]=mail.lower()
 
-    print("----Your account was succesfully created----")
+    print("\n----Your account was succesfully created----")
     print(f"Your email is : {mail}")
     print(f"Your id is : {id}")
     print(f"Your password is : {password}")
@@ -58,7 +58,7 @@ def printadmin(admin):
     print(f"Your password is : {admin.get("password")}")
     print("\n")
 
-#Add a new admin account to the list of existing admin
+#Add a new admin account to the list of existing admin--good
 def addAdmin(listAdmin,admin):
     listAdmin.append(admin)
     return listAdmin
@@ -105,13 +105,13 @@ def modifyAdmin(admin):
             admin["startDate"]=startDate
 
         case 6:
-            password=input("Enter your password :")
+            password=input("Enter your password :").strip()
             admin["password"]=encrypt.encrypt(password)
             
         case 7:
             return
         case _:
-            raise ValueError ("Option not supported")
+            print("Option not supported")
     
     return
     
@@ -154,21 +154,21 @@ def actionAdminMenu(admin,listStudent,listCourse):
             if course.checkCourseExist(listCourse,ID):
                 listCourse=course.addCourse(listCourse,course)               
             else :
-                raise ValueError("This course id already exist")
+                print("This course id already exist")
             
         case 4:
             ID=input("Enter course id :").upper()
             if course.checkCourseExist(listCourse,ID):
                 listCourse=course.deleteCourse(listCourse,ID)
             else :
-                raise ValueError("This course id doesn't exist")
+                print("This course id doesn't exist")
             
         case 5:
             ID=input("Enter course id :").upper()
             if course.checkCourseExist(listCourse,ID):
                 listCourse=course.modifyCourse(listCourse.get("ID"))
             else :
-                raise ValueError("This course id doesn't exist")   
+                print("This course id doesn't exist")   
         case 6:
             student=student.createStudent()
             listStudent=student.addStudent(listStudent,student)
@@ -177,13 +177,13 @@ def actionAdminMenu(admin,listStudent,listCourse):
             if student.checkStudentExist(listStudent,id):
                 listStudent=student.deleteStudent(listStudent,id)
             else :
-                raise ValueError("This student id doesn't exist")
+                print("This student id doesn't exist")
         case 8:
             id=input("Enter student id :")
             if student.checkStudentExist(listStudent,id):
                 student=student.modifyStudent(student)
             else :
-                raise ValueError("This student id doesn't exist")
+                print("This student id doesn't exist")
         case 9:
             id=input("Enter student id :")
             ID=input("Enter course id :").upper()
@@ -191,10 +191,10 @@ def actionAdminMenu(admin,listStudent,listCourse):
                 if course.checkCourseExist(listCourse,ID):
                     student=student.registerCourseStudent(student,listCourse,ID)
                 else :
-                    raise ValueError("This course id doesn't exist")
+                    print("This course id doesn't exist")
 
             else :
-                raise ValueError("This student id doesn't exist")
+                print("This student id doesn't exist")
            
         case 10:
             id=input("Enter student id :")
@@ -203,16 +203,17 @@ def actionAdminMenu(admin,listStudent,listCourse):
                 if course.checkCourseExist(listCourse,ID):
                     student=student.unregisterCourseStudent(student,listCourse,ID)
                 else :
-                    raise ValueError("This course id doesn't exist")
+                    print("This course id doesn't exist")
 
             else :
-                raise ValueError("This student id doesn't exist")
+                print("This student id doesn't exist")
         
         case 11:
             return 1
         case _:
-            raise ValueError ("Option not supported")
+            print("Option not supported")
     return 0
+
 #to verify
 def showAdminMenu(listAdmin,listCourse):
     x=chooseAdminMenu()
@@ -232,18 +233,19 @@ def showAdminMenu(listAdmin,listCourse):
         case 3:
             return 1
         case _:
-            raise ValueError ("Option not supported")
+            print("Option not supported")
     
     return 0
-        
-"""def main():
-    list=[]
-    lc=[]
-    c=course.createCourse()
-    lc=course.addCourse(lc,c)
-    showAdminMenu(list,lc)
+def main():
+    l=[]
+    c=createAdmin()
+    print(c)
+    l=addAdmin(l,c)
+    print(l)
+    l=deleteAdmin(l,c)
+    print(l)
 
-main()"""
+main()
     
 
     
