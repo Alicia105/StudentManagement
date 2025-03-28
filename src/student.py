@@ -1,5 +1,6 @@
 import random
 import encrypt
+import course
 
 #Create a new student account--good
 def createStudent():
@@ -40,6 +41,7 @@ def createStudent():
     
     #Create mail
     mail=name[0]+lastName+"@school.edu"
+    student["mail"]=mail
     print("----Your account was succesfully created----")
     print(f"Your email is : {mail}")
     print(f"Your id is : {id}")
@@ -52,20 +54,26 @@ def createStudent():
 
     return student
 
-#Add a new student account to the list of existing student
+def printStudent(student):
+    print("----Your personal informations----")
+    print(f"Your email is : {student.get("mail")}")
+    print(f"Your id is : {student.get("id")}")
+    print(f"Your password is : {student.get("password")}")
+    print("\n")
+
+#Add a new student account to the list of existing student--good
 def addStudent(listStudent,student):
     listStudent.append(student)
-    return
+    return listStudent
 
-#Remove a student account to the list of existing student
-def deleteStudent(listStudent):
-    id=input("Enter your id :")
+#Remove a student account to the list of existing student--good
+def deleteStudent(listStudent,id):
     for student in listStudent:
         if student.get("id")==id :
             listStudent.remove(student)
-    return
+    return listStudent
 
-#Modify a student account
+#Modify a student account--good
 def modifyStudent(student):
     print("What do you want to modify ?")
     print("1.Name")
@@ -89,7 +97,8 @@ def modifyStudent(student):
         case 3:
             while True :
                 try:
-                    age=int(input("Enter your age :"))
+                    print("Enter your age :")
+                    age=encrypt.checkEnteredNumberIsInt()
                     student["age"]=age
                     break
                 except:
@@ -100,7 +109,7 @@ def modifyStudent(student):
             
         case 5:
             password=input("Enter your password :")
-            student["password"]=encrypt(password)
+            student["password"]=encrypt.encrypt(password)
 
         case 6:
             return
@@ -109,9 +118,7 @@ def modifyStudent(student):
     
     return
     
-
 #Student Menu 
-
 def chooseStudentMenu():
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
@@ -121,14 +128,39 @@ def chooseStudentMenu():
     
     x=encrypt.checkEnteredNumberIsInt()
     return x
-        
-def actionStudentMenu(student):
+
+def registerCourseStudent(student,listCourse):
+    id=input("Enter course ID :")
+    if course.checkCourseExist(listCourse,id) :
+        student.get("courses").append(id)
+        for l in listCourse :
+            if l.get("ID")==id :
+                if l.get("Max Number of students")<l.get("Number of students"):
+                    l["Number of students"]+=1
+                    return student
+                else :
+                    print("Impossible to register, class is full")
+                    
+    return student
+
+def unregisterCourseStudent(student,listCourse):
+    id=input("Enter course ID :")
+    if course.checkCourseExist(listCourse,id) :
+        student.get("courses").remove(id)
+        for l in listCourse :
+            if l.get("ID")==id :
+                l["Number of students"]-=1
+                return student
+    return student
+
+def actionStudentMenu(student,listCourse):
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
     print("1.See Profile")
     print("2.Modify personal information")
-    print("3.Add/Remove courses")
-    print("4.Exit")
+    print("3.Add courses")
+    print("4.Remove courses")
+    print("5.Exit")
 
     x=encrypt.checkEnteredNumberIsInt()
 
@@ -138,25 +170,27 @@ def actionStudentMenu(student):
         case 2 :
             modifyStudent(student)
         case 3:
-            return #to complete
+            registerCourseStudent(student,listCourse)
         case 4:
+            unregisterCourseStudent(student,listCourse)
+        case 5:
             return
         case _:
             raise ValueError ("Option not supported")
     return
 
-
-def showStudentMenu(list):
+def showStudentMenu(listStudent,listCourse):
     x=chooseStudentMenu()
     match x:
         case 1 :
             id=input("Enter your id or email :")
             pwd=input("Enter your pwd :")
-            student=encrypt.login(list,id,pwd)
+            student=encrypt.login(listStudent,id,pwd)
+            actionStudentMenu(student)
 
         case 2 :
             student=createStudent()
-            addStudent(list,student)
+            listStudent=addStudent(listStudent,student)
             
         case 3:
             return
@@ -166,8 +200,14 @@ def showStudentMenu(list):
     return
         
 def main():
+    list=[]
+    lc=[]
     s=createStudent()
-    print(s)
+    c=course.createCourse()
+    list=addStudent(list,s)
+    lc=course.createCourse()
+    while True:
+        showStudentMenu(list,lc)
 
 main()
     

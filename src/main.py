@@ -5,9 +5,8 @@ def displayMenu():
     print("Welcome to our platform !")
     print("-----Choose a menu-----")
     print("1. Administrator")
-    print("2. School staff")
-    print("3.Student")
-    print("4.Exit")
+    print("2. Student")
+    print("3.Exit")
 
     while True :
         try :
@@ -20,12 +19,11 @@ def displayMenu():
 def showMenu(a):
     match(a):
         case 1:
-            break
+            #to complete
         case 2:
-            break
+            showStudentMenu(list)
         case 3:
-            showMenuStudent(a)
-            break
+            return
         case _:
             break
 
