@@ -35,7 +35,7 @@ def createStudent():
     student["major"]=major
 
     #Enter password
-    password=input("Enter your password :")
+    password=input("Enter your password :").strip()
 
     #Create course list
     list=[]
@@ -48,7 +48,7 @@ def createStudent():
     
     #Create mail
     mail=name[0]+lastName+"@school.edu"
-    student["mail"]=mail
+    student["mail"]=mail.lower()
     print("----Your account was succesfully created----")
     print(f"Your email is : {mail}")
     print(f"Your id is : {id}")
@@ -102,14 +102,9 @@ def modifyStudent(student):
             student["lastName"]=lastName
            
         case 3:
-            while True :
-                try:
-                    print("Enter your age :")
-                    age=encrypt.checkEnteredNumberIsInt()
-                    student["age"]=age
-                    break
-                except:
-                    raise ValueError("Please enter a number")
+            print("Enter your age :")
+            age=encrypt.checkEnteredNumberIsInt()
+            student["age"]=age
         case 4:
             dateOfBirth=input("Enter your date of birth as DD/MM/YYYY :")
             student["dateOfBirth"]=dateOfBirth
@@ -121,7 +116,7 @@ def modifyStudent(student):
         case 6:
             return
         case _:
-            raise ValueError ("Option not supported")
+            print ("Option not supported")
     
     return
     
@@ -136,7 +131,8 @@ def chooseStudentMenu():
     
     x=encrypt.checkEnteredNumberIsInt()
     return x
-#to verify
+
+#good
 def registerCourseStudent(student,listCourse,id):
     if course.checkCourseExist(listCourse,id) :
         student.get("courses").append(id)
@@ -147,16 +143,23 @@ def registerCourseStudent(student,listCourse,id):
                     return student
                 else :
                     print("Impossible to register, class is full")
-                    
+    else :
+        print("Course does not exist.")                
     return student
-#to verify
+
+#good
 def unregisterCourseStudent(student,listCourse,id):
     if course.checkCourseExist(listCourse,id) :
-        student.get("courses").remove(id)
+        student["courses"].remove(id)
         for l in listCourse :
             if l.get("ID")==id :
                 l["Number of students"]-=1
                 return student
+            else:
+                print("You are not enrolled in this course.")
+    else :
+        print("Course does not exist.")
+
     return student
 
 #good
@@ -175,33 +178,31 @@ def actionStudentMenu(student,listStudent,listCourse):
         case 1 :
             print(student)           
         case 2 :
-            if checkStudentExist(listStudent,id):
-                student=listStudent.get("id")
-                modifyStudent(student)
-            else :
-                raise ValueError("This student id doesn't exist")
-    
+            modifyStudent(student)
         case 3:
             id=input("Enter course id :")
-            if course.checkCourseExist(listCourse,ID):
-                registerCourseStudent(student,listCourse,ID)
+            if course.checkCourseExist(listCourse,id):
+                registerCourseStudent(student,listCourse,id)
+                print("----You were succesfully registered----")
+                print(f"Your courses :{student.get("courses")}")
             else :
-                raise ValueError("This course id doesn't exist")
+                print("This course id doesn't exist")
 
         case 4:
-            ID=input("Enter course id :")
-            unregisterCourseStudent(student,listCourse,ID)
-            if course.checkCourseExist(listCourse,ID):
-                unregisterCourseStudent(student,listCourse,ID)
+            id=input("Enter course id :")
+            if course.checkCourseExist(listCourse,id):
+                unregisterCourseStudent(student,listCourse,id)
+                print("----You were succesfully unregistered----")
+                print(f"Your courses :{student.get("courses")}")
             else :
-                raise ValueError("This course id doesn't exist")
+                print("This course id doesn't exist")
 
         case 5:
             return 1
         case _:
-            raise ValueError ("Option not supported")
+            print("Option not supported")
     return 0
-#to verify
+#good
 def showStudentMenu(listStudent,listCourse):
     x=chooseStudentMenu()
     match x:
@@ -209,27 +210,34 @@ def showStudentMenu(listStudent,listCourse):
             id=input("Enter your id or email :")
             pwd=input("Enter your pwd :")
             student=encrypt.logIn(listStudent,id,pwd)
-            t=0
+            if(student!=None):
+                t=0
+            else:
+                return 0
             while(t==0):
                 t=actionStudentMenu(student,listStudent,listCourse)
             return 0
         case 2 :
             student=createStudent()
             listStudent=addStudent(listStudent,student)
+            print(listStudent)
             return 0
         case 3:
             return 1
         case _:
-            raise ValueError ("Option not supported")
+            print ("Option not supported")
     
     return 0
         
 """def main():
-    list=[]
+    l=[]
     lc=[]
     c=course.createCourse()
     lc=course.addCourse(lc,c)
-    showStudentMenu(list,lc)
+    s=createStudent()
+    l=addStudent(l,s)
+    while True:
+        showStudentMenu(l,lc)
 
 main()"""
     

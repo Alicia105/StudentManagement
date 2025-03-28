@@ -22,7 +22,7 @@ def logIn(userList, userId, pwd):
             # Ensure password exists
             if storedPassword is None:
                 print("Login Failed: No password found.")
-                return
+                return None
             
             # Compare passwords correctly
             if decrypt(storedPassword) == pwd:
@@ -30,7 +30,7 @@ def logIn(userList, userId, pwd):
                 return user
             else:
                 print("Login Failed: Incorrect password.")
-                return
+                return None
     print("Login Failed: User not found.")  # If no match is found
     return None
 

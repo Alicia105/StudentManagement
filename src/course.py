@@ -8,7 +8,7 @@ def checkCourseExist(list,id):
     return False
 
 #check unique ID course-->to modify, do the same for student ID
-def uniqueIDCourse():
+"""def uniqueIDCourse():
 #def uniqueIDCourse(list):
     while True :
         try:
@@ -16,7 +16,8 @@ def uniqueIDCourse():
             #checkCourseExist(list,id)
             return id
         except ValueError :
-            print("This ID is already taken. Enter a different one.")
+            print("This ID is already taken. Enter a different one.")"
+"""
 
 #Create a course--good
 def createCourse():
@@ -27,7 +28,7 @@ def createCourse():
     course["course Name"]=courseName
 
     #Enter course id-->take care here
-    id=uniqueIDCourse()
+    id=input("Enter course ID :")
     course["ID"]=id.upper()
 
     #Enter number of student 
@@ -43,6 +44,11 @@ def createCourse():
     semester=input("Enter course semester :")
     course["semester"]=semester
 
+    #Enter number of credit hours
+    print("Enter number of credit hours :")
+    credit=encrypt.checkEnteredNumberIsInt()
+    course["number of credit hours"]=credit
+
     #Enter professor name
     profName=input("Enter professor name  :")
     course["Professor Name"]=profName
@@ -52,6 +58,7 @@ def createCourse():
     print(f"Number of students registered : {n}")
     print(f"Max number of students : {maxNumber}")
     print(f"Course semester : {semester}")
+    print(f"Number of credit hours :{credit}")
     print(f"Professor Name :{profName}")
     print("--------------------------------------------")
     print("\n")
@@ -79,7 +86,8 @@ def modifyCourse(course):
     print("4.Max number of students")
     print("5.Semester")
     print("6.Professor")
-    print("7.Exit")
+    print("7.Credit hours")
+    print("8.Exit")
 
     x=encrypt.checkEnteredNumberIsInt()
 
@@ -89,28 +97,19 @@ def modifyCourse(course):
             course["course Name"]=courseName
             
         case 2 :
-            id=uniqueIDCourse()
+            id=input("Enter course ID :")
             course["ID"]=id.upper()
            
         case 3:
-            while True :
-                try:
-                    print("Enter number of student registered:")
-                    numStudent=encrypt.checkEnteredNumberIsInt()
-                    course["Number of students"]=numStudent
-                    break
-                except:
-                    raise ValueError("Please enter a number")
+            print("Enter number of student :")
+            numStudent=encrypt.checkEnteredNumberIsInt()
+            course["Number of students"]=numStudent
+                
         case 4:
-            while True :
-                try:
-                    print("Enter maximum number of student :")
-                    maxNumber=encrypt.checkEnteredNumberIsInt()
-                    course["Max Number of students"]=maxNumber
-                    break
-                except:
-                    raise ValueError("Please enter a number")
-            
+            print("Enter maximum number of student :")
+            maxNumber=encrypt.checkEnteredNumberIsInt()
+            course["Max Number of students"]=maxNumber
+                        
         case 5:
             semsester=input("Enter course semester :")
             course["semester"]=semsester
@@ -120,8 +119,12 @@ def modifyCourse(course):
             course["Professor Name"]=profName
         
         case 7:
+            print("Enter number of credit hours :")
+            credit=encrypt.checkEnteredNumberIsInt()
+            course["number of credit hours"]=credit
+        case 8:
             return
         case _:
-            raise ValueError ("Option not supported")
+            print("Option not supported")
     
     return
