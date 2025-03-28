@@ -16,16 +16,10 @@ def logIn(list,id,pwd):
                 return
     return
 
-def chooseANumberForMenu():
+def checkEnteredNumberIsInt():
     while True :
         try: 
             x=int(input())
             return x
-        except:
-            raise ValueError ("Enter a number")
- 
-
-def main():
-    x=chooseANumberForMenu()
-
-main()
+        except ValueError:
+            print("Enter a number")

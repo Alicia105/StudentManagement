@@ -1,7 +1,7 @@
 import random
 import encrypt
 
-#Create a new student account--problem with age if not number
+#Create a new student account--good
 def createStudent():
     student=dict()
 
@@ -15,7 +15,7 @@ def createStudent():
 
     #Enter age
     print("Enter your age :")
-    age=encrypt.chooseANumberForMenu()
+    age=encrypt.checkEnteredNumberIsInt()
     student["age"]=age
     
     #Enter date of birth
@@ -75,7 +75,7 @@ def modifyStudent(student):
     print("5.Password")
     print("6.Exit")
 
-    x=encrypt.chooseANumberForMenu()
+    x=encrypt.checkEnteredNumberIsInt()
 
     match x:
         case 1 :
@@ -119,7 +119,7 @@ def chooseStudentMenu():
     print("2.Sign In")
     print("3.Exit")
     
-    x=encrypt.chooseANumberForMenu()
+    x=encrypt.checkEnteredNumberIsInt()
     return x
         
 def actionStudentMenu(student):
@@ -130,7 +130,7 @@ def actionStudentMenu(student):
     print("3.Add/Remove courses")
     print("4.Exit")
 
-    x=encrypt.chooseANumberForMenu()
+    x=encrypt.checkEnteredNumberIsInt()
 
     match x:
         case 1 :
