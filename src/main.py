@@ -1,6 +1,9 @@
 import student
+import course
 
 def displayMenu():
+    listStudent=[]
+    listCourse=[]
     print("===========================SCHOOL MANAGEMENT SYSTEM===========================")
     print("Welcome to our platform !")
     print("-----Choose a menu-----")
@@ -11,20 +14,31 @@ def displayMenu():
     while True :
         try :
             a=int(input())
-            #showMenu(a)
+            showMenu(a,listStudent,listCourse)
             return
         except:
             raise ValueError("Enter a valid number")
     
-def showMenu(a):
+def showMenu(a,listStudent,listCourse):
     match(a):
         case 1:
+            #t=0
+            #while t==0:
             #to complete
+            return 0
         case 2:
-            showStudentMenu(list)
+            t=0
+            while t==0:
+                t=student.showStudentMenu(listStudent,listCourse)
+            return 0
         case 3:
-            return
+            return 1
         case _:
-            break
+            raise ValueError("Option not supported")
 
-    return
+    return 0
+
+def main():
+    displayMenu()
+
+main()

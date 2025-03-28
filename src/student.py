@@ -119,6 +119,7 @@ def modifyStudent(student):
     return
     
 #Student Menu 
+#good
 def chooseStudentMenu():
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
@@ -128,7 +129,7 @@ def chooseStudentMenu():
     
     x=encrypt.checkEnteredNumberIsInt()
     return x
-
+#to verify
 def registerCourseStudent(student,listCourse):
     id=input("Enter course ID :")
     if course.checkCourseExist(listCourse,id) :
@@ -142,7 +143,7 @@ def registerCourseStudent(student,listCourse):
                     print("Impossible to register, class is full")
                     
     return student
-
+#to verify
 def unregisterCourseStudent(student,listCourse):
     id=input("Enter course ID :")
     if course.checkCourseExist(listCourse,id) :
@@ -153,6 +154,7 @@ def unregisterCourseStudent(student,listCourse):
                 return student
     return student
 
+#good
 def actionStudentMenu(student,listCourse):
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
@@ -174,11 +176,11 @@ def actionStudentMenu(student,listCourse):
         case 4:
             unregisterCourseStudent(student,listCourse)
         case 5:
-            return
+            return 1
         case _:
             raise ValueError ("Option not supported")
-    return
-
+    return 0
+#to verify
 def showStudentMenu(listStudent,listCourse):
     x=chooseStudentMenu()
     match x:
@@ -186,30 +188,29 @@ def showStudentMenu(listStudent,listCourse):
             id=input("Enter your id or email :")
             pwd=input("Enter your pwd :")
             student=encrypt.logIn(listStudent,id,pwd)
-            actionStudentMenu(student,listCourse)
-
+            t=0
+            while(t==0):
+                t=actionStudentMenu(student,listCourse)
+            return 0
         case 2 :
             student=createStudent()
             listStudent=addStudent(listStudent,student)
-            
+            return 0
         case 3:
-            return
+            return 1
         case _:
             raise ValueError ("Option not supported")
     
-    return
+    return 0
         
-def main():
+"""def main():
     list=[]
     lc=[]
-    s=createStudent()
     c=course.createCourse()
-    list=addStudent(list,s)
     lc=course.addCourse(lc,c)
-    while True:
-        showStudentMenu(list,lc)
+    showStudentMenu(list,lc)
 
-main()
+main()"""
     
 
     
