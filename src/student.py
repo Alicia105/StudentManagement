@@ -185,8 +185,8 @@ def showStudentMenu(listStudent,listCourse):
         case 1 :
             id=input("Enter your id or email :")
             pwd=input("Enter your pwd :")
-            student=encrypt.login(listStudent,id,pwd)
-            actionStudentMenu(student)
+            student=encrypt.logIn(listStudent,id,pwd)
+            actionStudentMenu(student,listCourse)
 
         case 2 :
             student=createStudent()
@@ -205,7 +205,7 @@ def main():
     s=createStudent()
     c=course.createCourse()
     list=addStudent(list,s)
-    lc=course.createCourse()
+    lc=course.addCourse(lc,c)
     while True:
         showStudentMenu(list,lc)
 
