@@ -2,6 +2,13 @@ import random
 import encrypt
 import course
 
+#check if student exists
+def checkStudentExist(listStudent,id):
+    for l in listStudent:
+        if l.get("id")==id:
+            return True
+    return False
+
 #Create a new student account--good
 def createStudent():
     student=dict()
@@ -130,13 +137,12 @@ def chooseStudentMenu():
     x=encrypt.checkEnteredNumberIsInt()
     return x
 #to verify
-def registerCourseStudent(student,listCourse):
-    id=input("Enter course ID :")
+def registerCourseStudent(student,listCourse,id):
     if course.checkCourseExist(listCourse,id) :
         student.get("courses").append(id)
         for l in listCourse :
             if l.get("ID")==id :
-                if l.get("Max Number of students")<l.get("Number of students"):
+                if l.get("Max Number of students")>l.get("Number of students"):
                     l["Number of students"]+=1
                     return student
                 else :
@@ -144,8 +150,7 @@ def registerCourseStudent(student,listCourse):
                     
     return student
 #to verify
-def unregisterCourseStudent(student,listCourse):
-    id=input("Enter course ID :")
+def unregisterCourseStudent(student,listCourse,id):
     if course.checkCourseExist(listCourse,id) :
         student.get("courses").remove(id)
         for l in listCourse :
@@ -155,7 +160,7 @@ def unregisterCourseStudent(student,listCourse):
     return student
 
 #good
-def actionStudentMenu(student,listCourse):
+def actionStudentMenu(student,listStudent,listCourse):
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
     print("1.See Profile")
@@ -170,11 +175,27 @@ def actionStudentMenu(student,listCourse):
         case 1 :
             print(student)           
         case 2 :
-            modifyStudent(student)
+            if checkStudentExist(listStudent,id):
+                student=listStudent.get("id")
+                modifyStudent(student)
+            else :
+                raise ValueError("This student id doesn't exist")
+    
         case 3:
-            registerCourseStudent(student,listCourse)
+            id=input("Enter course id :")
+            if course.checkCourseExist(listCourse,ID):
+                registerCourseStudent(student,listCourse,ID)
+            else :
+                raise ValueError("This course id doesn't exist")
+
         case 4:
-            unregisterCourseStudent(student,listCourse)
+            ID=input("Enter course id :")
+            unregisterCourseStudent(student,listCourse,ID)
+            if course.checkCourseExist(listCourse,ID):
+                unregisterCourseStudent(student,listCourse,ID)
+            else :
+                raise ValueError("This course id doesn't exist")
+
         case 5:
             return 1
         case _:
@@ -190,7 +211,7 @@ def showStudentMenu(listStudent,listCourse):
             student=encrypt.logIn(listStudent,id,pwd)
             t=0
             while(t==0):
-                t=actionStudentMenu(student,listCourse)
+                t=actionStudentMenu(student,listStudent,listCourse)
             return 0
         case 2 :
             student=createStudent()

@@ -1,5 +1,4 @@
 import encrypt
-list_course=[]
 
 #check if course exists
 def checkCourseExist(list,id):
