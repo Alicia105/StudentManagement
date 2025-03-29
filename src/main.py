@@ -47,6 +47,7 @@ def main():
     while t==0 :
         t=displayMenu()
     print("Thank you for using the School Management System!")
+    print("--------------------------------------------------")
     return    
 
 main()
