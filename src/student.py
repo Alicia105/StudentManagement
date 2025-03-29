@@ -68,6 +68,12 @@ def printStudent(student):
     print(f"Your password is : {student.get("password")}")
     print("\n")
 
+def getStudent(listStudent,id):
+    for l in listStudent :
+        if checkStudentExist(listStudent,id) and l.get("id")==id:
+            return l
+    return None
+    
 #Add a new student account to the list of existing student--good
 def addStudent(listStudent,student):
     listStudent.append(student)

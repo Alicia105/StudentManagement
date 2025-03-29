@@ -19,6 +19,12 @@ def checkCourseExist(list,id):
             print("This ID is already taken. Enter a different one.")"
 """
 
+def getCourse(listCourse,id):
+    for l in listCourse :
+        if checkCourseExist(listCourse,l.get("ID")) and l.get("ID")==id:
+            return l
+    return None
+
 #Create a course--good
 def createCourse():
     course=dict()

@@ -63,14 +63,14 @@ def addAdmin(listAdmin,admin):
     listAdmin.append(admin)
     return listAdmin
 
-#Remove a admin account to the list of existing admin
+#Remove a admin account to the list of existing admin--good
 def deleteAdmin(listAdmin,id):
-    for admin in listAdmin:
-        if admin.get("id")==id :
-            listAdmin.remove(admin)
-    return listAdmin
+    newList = [admin for admin in listAdmin if admin.get("id") != id]
+    if len(newList) == len(listAdmin):
+        print("Admin not found.")  
+    return newList
 
-#Modify a admin account
+#Modify a admin account--good
 def modifyAdmin(admin):
     print("What do you want to modify ?")
     print("1.Name")
@@ -116,7 +116,7 @@ def modifyAdmin(admin):
     return
     
 #Admin Menu 
-#to verify
+#good
 def chooseAdminMenu():
     print("===========================Welcome to the admin menu===========================")
     print("Choose an option :")
@@ -135,87 +135,121 @@ def actionAdminMenu(admin,listStudent,listCourse):
     print("3.Add courses")
     print("4.Remove courses")
     print("5.Modify courses")
-    print("6.Add student")
-    print("7.Remove student")
-    print("8.Modify student")
-    print("9.Register student")
-    print("10.Unregister student")
-    print("11.Exit")
+    print("6.See courses")
+    print("7.Add student")
+    print("8.Remove student")
+    print("9.Modify student")
+    print("10.Register student")
+    print("11.Unregister student")
+    print("12.See student profile")
+    print("13.See all student profiles")
+    print("14.See a course")
+    print("15.Exit")
 
     x=encrypt.checkEnteredNumberIsInt()
 
     match x:
-        case 1 :
+        case 1 :#good
             print(admin)           
-        case 2 :
+        case 2 :#good
             modifyAdmin(admin)
-        case 3:
-            course=course.createcourse()
-            if course.checkCourseExist(listCourse,ID):
-                listCourse=course.addCourse(listCourse,course)               
+        case 3:#good
+            c=course.createCourse()
+            if not course.checkCourseExist(listCourse,c.get("ID")) and len(listCourse)>0:
+                listCourse=course.addCourse(listCourse,c)               
+
+            elif len(listCourse)==0:
+                listCourse=course.addCourse(listCourse,c)  
+
             else :
                 print("This course id already exist")
             
-        case 4:
+        case 4:#good
             ID=input("Enter course id :").upper()
             if course.checkCourseExist(listCourse,ID):
                 listCourse=course.deleteCourse(listCourse,ID)
             else :
                 print("This course id doesn't exist")
             
-        case 5:
+        case 5:#good
             ID=input("Enter course id :").upper()
             if course.checkCourseExist(listCourse,ID):
-                listCourse=course.modifyCourse(listCourse.get("ID"))
+                c=course.getCourse(listCourse,ID)
+                course.modifyCourse(c)
             else :
                 print("This course id doesn't exist")   
-        case 6:
-            student=student.createStudent()
-            listStudent=student.addStudent(listStudent,student)
-        case 7:
+        case 6:#good
+            print(listCourse)
+        
+        case 7:#good
+            s=student.createStudent()
+            listStudent=student.addStudent(listStudent,s)
+        case 8:#good
             id=input("Enter student id :")
             if student.checkStudentExist(listStudent,id):
                 listStudent=student.deleteStudent(listStudent,id)
+                print("This student account was succesfully deleted")
             else :
                 print("This student id doesn't exist")
-        case 8:
+
+        case 9:#good
             id=input("Enter student id :")
             if student.checkStudentExist(listStudent,id):
-                student=student.modifyStudent(student)
+                s=student.getStudent(listStudent,id)
+                student.modifyStudent(s)
             else :
                 print("This student id doesn't exist")
-        case 9:
+
+        case 10:#good
             id=input("Enter student id :")
             ID=input("Enter course id :").upper()
             if student.checkStudentExist(listStudent,id):
                 if course.checkCourseExist(listCourse,ID):
-                    student=student.registerCourseStudent(student,listCourse,ID)
+                    s=student.getStudent(listStudent,id)
+                    s=student.registerCourseStudent(s,listCourse,ID)
                 else :
                     print("This course id doesn't exist")
 
             else :
                 print("This student id doesn't exist")
            
-        case 10:
+        case 11:#good
             id=input("Enter student id :")
             ID=input("Enter course id :").upper()
             if student.checkStudentExist(listStudent,id):
                 if course.checkCourseExist(listCourse,ID):
-                    student=student.unregisterCourseStudent(student,listCourse,ID)
+                    s=student.getStudent(listStudent,id)
+                    s=student.unregisterCourseStudent(s,listCourse,ID)
                 else :
                     print("This course id doesn't exist")
 
-            else :
+            else :#good
                 print("This student id doesn't exist")
         
-        case 11:
+        case 12:#good
+            id=input("Enter student id :")
+            if student.checkStudentExist(listStudent,id):
+                s=student.getStudent(listStudent,id)
+                print(s)
+            else :
+                print("This student id doesn't exist")
+            
+        case 13:#good
+            print(listStudent)
+        case 14:#good
+            ID=input("Enter course id :").upper()
+            if course.checkCourseExist(listCourse,ID):
+                c=course.getCourse(listCourse,ID)
+                print(c)              
+            else :
+                print("This course id doesn't exist")
+        case 15:#good
             return 1
         case _:
             print("Option not supported")
     return 0
-
-#to verify
-def showAdminMenu(listAdmin,listCourse):
+#good
+def showAdminMenu(listAdmin,listStudent,listCourse):
     x=chooseAdminMenu()
     match x:
         case 1 :
@@ -223,8 +257,12 @@ def showAdminMenu(listAdmin,listCourse):
             pwd=input("Enter your pwd :")
             admin=encrypt.logIn(listAdmin,id,pwd)
             t=0
+            if(admin!=None):
+                t=0
+            else:
+                return 0
             while(t==0):
-                t=actionAdminMenu(admin,listCourse)
+                t=actionAdminMenu(admin,listStudent,listCourse)
             return 0
         case 2 :
             admin=createAdmin()
@@ -236,16 +274,29 @@ def showAdminMenu(listAdmin,listCourse):
             print("Option not supported")
     
     return 0
-def main():
-    l=[]
-    c=createAdmin()
-    print(c)
-    l=addAdmin(l,c)
-    print(l)
-    l=deleteAdmin(l,c)
-    print(l)
 
-main()
+"""def main():
+    lc=[]
+    ls=[]
+    la=[]
+    c=course.createCourse()
+    lc=course.addCourse(lc,c)
+    print(lc)
+
+    s=student.createStudent()
+    ls=student.addStudent(ls,s)
+    print(ls)
+
+    a=createAdmin()
+    la=addAdmin(la,a)
+    print(la)
+
+    while True:
+        showAdminMenu(la,ls,lc)
+
+        
+    
+main()"""
     
 
     

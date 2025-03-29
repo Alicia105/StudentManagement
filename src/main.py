@@ -28,7 +28,7 @@ def showMenu(a,listAdmin,listStudent,listCourse):
         case 1:
             t=0
             while t==0:
-                t=administrator.showAdminMenu(listAdmin,listCourse)
+                t=administrator.showAdminMenu(listAdmin,listStudent,listCourse)
             return 2
         case 2:
             t=0
