@@ -276,7 +276,7 @@ def update_student(student_id):
     student.student_id=data.get("id",student.student_id)
     student.last_name=data.get("lastName",student.last_name)
     student.mail=data.get("mail",student.mail)
-    student.password=data.get("semester",student.password)
+    student.password=data.get("password",student.password)
     student.major=data.get("major",student.major)
     student.date_of_birth=data.get("dateOfBirth",student.date_of_birth)
     student.age=data.get("age",student.age)
@@ -314,7 +314,7 @@ def get_admins():
                      'id': s.admin_id,
                      'mail':s.mail,
                      'password': s.password,
-                     'mail': s.mail, 'startDate': s.start_date,
+                     'startDate': s.start_date,
                      'dateOfBirth': s.date_of_birth,
                      'job position':s.job_position } for s in admins])
 
@@ -330,7 +330,7 @@ def get_admin(admin_id):
                      'id': s.admin_id,
                      'mail':s.mail,
                      'password': s.password,
-                     'mail': s.mail, 'startDate': s.start_date,
+                     'startDate': s.start_date,
                      'dateOfBirth': s.date_of_birth,
                       'job position':s.job_position })
 
