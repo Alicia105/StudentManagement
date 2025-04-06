@@ -119,6 +119,12 @@ def printadmin(admin):
     print(f"Your password is : {admin.get("password")}")
     print("\n")
 
+def checkAdminExist(listAdmin,id):
+    for l in listAdmin:
+        if l.get("id")==id:
+            return True
+    return False
+
 #Add a new admin account to the list of existing admin--good
 def addAdmin(listAdmin,admin,API_URL):
     listAdmin.append(admin)
@@ -193,7 +199,7 @@ def chooseAdminMenu():
     return x
 
 #good
-def actionAdminMenu(admin,listStudent,listCourse,API_URL):
+def actionAdminMenu(admin,listAdmin,listStudent,listCourse,API_URL):
     print("===========================Welcome to the admin menu===========================")
     print("Choose an option :")
     print("1.See Profile")
@@ -210,7 +216,8 @@ def actionAdminMenu(admin,listStudent,listCourse,API_URL):
     print("12.See student profile")
     print("13.See all student profiles")
     print("14.See a course")
-    print("15.Exit")
+    print("15.Remove admin")
+    print("16.Exit")
 
     x=encrypt.checkEnteredNumberIsInt()
 
@@ -310,6 +317,24 @@ def actionAdminMenu(admin,listStudent,listCourse,API_URL):
             else :
                 print("This course id doesn't exist")
         case 15:#good
+            id=input("Enter admin id :")
+            if checkAdminExist(listAdmin,id):
+                if admin.get("id")==id:
+                    print("If you delete your account you will be disconnected.\n You'll have to create a new admin account to access this menu.\n")
+                    print("Are you sure ? \n 1.Yes  2.No\n")
+                    i=encrypt.checkEnteredNumberIsInt()
+                    if i==1 :
+                        deleteAdmin(listAdmin,id,API_URL)
+                        print("Your account was deleted. You will be disconnected\n")
+                        return 1
+                                      
+                else :
+                    deleteAdmin(listAdmin,id,API_URL)
+
+            else :#good
+                print("This admin id doesn't exist")
+            
+        case 16:#good
             return 1
         case _:
             print("Option not supported")
@@ -329,7 +354,7 @@ def showAdminMenu(listAdmin,listStudent,listCourse,API_URL):
             else:
                 return 0
             while(t==0):
-                t=actionAdminMenu(admin,listStudent,listCourse,API_URL)
+                t=actionAdminMenu(admin,listAdmin,listStudent,listCourse,API_URL)
             return 0
         case 2 :
             admin=createAdmin()
