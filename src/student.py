@@ -1,6 +1,71 @@
 import random
 import encrypt
 import course
+import requests
+
+
+#To communicate with API--------------------------------------------------------------------------------
+
+def send_student_database(API_URL,name, age, last_name,student_id, mail, password, major, date_of_birth):
+    if isinstance(password, bytes):
+        password = encrypt.decrypt(password)
+    data = {"name": name, "lastName":last_name,"age": age, "id":student_id, "mail":mail, "password":password,"major":major, "dateOfBirth":date_of_birth}
+    response = requests.post(f"{API_URL}/students", json=data)
+    print(response.json())
+
+def update_student_database(API_URL,name, age, last_name,student_id, mail, password, major, date_of_birth):
+    if isinstance(password, bytes):
+        password = encrypt.decrypt(password)
+    data = {"name": name, "lastName":last_name,"age": age, "id":student_id, "mail":mail, "password":password,"major":major, "dateOfBirth":date_of_birth}
+    response = requests.put(f"{API_URL}/students/{student_id}", json=data)
+    print(response.json())
+
+def get_student_database(API_URL,studentid):
+    response = requests.get(f"{API_URL}/students/{studentid}")
+    if response.status_code == 200:
+        studentDB = response.json()
+        student=dict()
+        student["name"]=studentDB['name']
+        student["lastName"]=studentDB['lastName']
+        student["age"]=studentDB['age']
+        student["dateOfBirth"]=studentDB['dateOfBirth']
+        student["major"]=studentDB['major']
+        student["id"]=studentDB['id']
+        student["mail"]=studentDB['mail']
+        student['password']=encrypt.encrypt(studentDB['password'])
+        list=[]
+        student["courses"]=list
+        print(f"Student Found: ID: {studentDB['id']}, name: {studentDB['name']}, Age: {studentDB['age']}, lastName: {studentDB['lastName']}, mail : {studentDB['mail']}, password : {studentDB['password']}, major : {studentDB['major']}, date Of birth :{studentDB['dateOfBirth']}")
+    else:
+        print("Student not found")
+
+def get_all_students_database(API_URL):
+    response = requests.get(f"{API_URL}/students")
+    if response.status_code == 200:
+        studentsDB = response.json()
+        listStudent=[]
+        for student in studentsDB :
+            stud=dict()
+            stud["name"]=student['name']
+            stud["lastName"]=student['lastName']
+            stud["age"]=student['age']
+            stud["dateOfBirth"]=student['dateOfBirth']
+            stud["major"]=student['major']
+            stud["id"]=student['id']
+            stud["mail"]=student['mail']
+            stud['password']=encrypt.encrypt(student['password'])
+            list=[]
+            stud["courses"]=list
+            listStudent.append(stud)
+        return listStudent
+    else:
+        print("Failed to retrieve students") 
+        listStudent=[]
+        return listStudent       
+
+def delete_student_database(API_URL,studentid):
+    requests.delete(f"{API_URL}/students/{studentid}")
+#------------------------------------------------------------------------------------------------------------------
 
 #check if student exists
 def checkStudentExist(listStudent,id):
@@ -75,19 +140,23 @@ def getStudent(listStudent,id):
     return None
     
 #Add a new student account to the list of existing student--good
-def addStudent(listStudent,student):
+def addStudent(listStudent,student,API_URL):
     listStudent.append(student)
+    send_student_database(API_URL,student["name"],student["age"],student["lastName"],student["id"], student["mail"],student["password"], student["major"],student["dateOfBirth"])
     return listStudent
 
 #Remove a student account to the list of existing student--good
-def deleteStudent(listStudent,id):
+def deleteStudent(listStudent,id,API_URL):
+    for s in listStudent :
+        if s.get("id")==id:
+            delete_student_database(API_URL,id)
     newList = [student for student in listStudent if student.get("id") != id]
     if len(newList) == len(listStudent):
-        print("Student not found.")  
+        print("Student not found.")
     return newList
 
 #Modify a student account--good
-def modifyStudent(student):
+def modifyStudent(student,API_URL):
     print("What do you want to modify ?")
     print("1.Name")
     print("2.Surname")
@@ -123,7 +192,7 @@ def modifyStudent(student):
             return
         case _:
             print ("Option not supported")
-    
+    update_student_database(API_URL,student["name"],student["age"],student["lastName"],student["id"], student["mail"],student["password"], student["major"],student["dateOfBirth"])
     return
     
 #Student Menu 
@@ -169,7 +238,7 @@ def unregisterCourseStudent(student,listCourse,id):
     return student
 
 #good
-def actionStudentMenu(student,listStudent,listCourse):
+def actionStudentMenu(student,listStudent,listCourse,API_URL):
     print("===========================Welcome to the student menu===========================")
     print("Choose an option :")
     print("1.See Profile")
@@ -184,7 +253,7 @@ def actionStudentMenu(student,listStudent,listCourse):
         case 1 :
             print(student)           
         case 2 :
-            modifyStudent(student)
+            modifyStudent(student,API_URL)
         case 3:
             id=input("Enter course id :")
             if course.checkCourseExist(listCourse,id):
@@ -208,8 +277,9 @@ def actionStudentMenu(student,listStudent,listCourse):
         case _:
             print("Option not supported")
     return 0
+
 #good
-def showStudentMenu(listStudent,listCourse):
+def showStudentMenu(listStudent,listCourse,API_URL):
     x=chooseStudentMenu()
     match x:
         case 1 :
@@ -221,11 +291,11 @@ def showStudentMenu(listStudent,listCourse):
             else:
                 return 0
             while(t==0):
-                t=actionStudentMenu(student,listStudent,listCourse)
+                t=actionStudentMenu(student,listStudent,listCourse,API_URL)
             return 0
         case 2 :
             student=createStudent()
-            listStudent=addStudent(listStudent,student)
+            listStudent=addStudent(listStudent,student,API_URL)
             return 0
         case 3:
             return 1

@@ -1,4 +1,59 @@
 import encrypt
+import requests
+
+
+#To communicate with API--------------------------------------------------------------------------------
+
+def send_course_database(API_URL,course_name,professor_name,course_id,number_of_credit_hours,number_of_students,max_number_of_students,semester):
+    data = {"course Name":course_name, "Professor Name":professor_name, "ID":course_id,"number of credit hours":number_of_credit_hours,"Number of students":number_of_students,"Max Number of students":max_number_of_students, "semester":semester}
+    response = requests.post(f"{API_URL}/courses", json=data)
+    print(response.json())
+
+def update_course_database(API_URL,course_name,professor_name,course_id,number_of_credit_hours,number_of_students,max_number_of_students,semester):
+    data = {"course Name":course_name, "Professor Name":professor_name, "ID":course_id,"number of credit hours":number_of_credit_hours,"Number of students":number_of_students,"Max Number of students":max_number_of_students, "semester":semester}
+    response = requests.put(f"{API_URL}/courses/{course_id}", json=data)
+    print(response.json())
+
+def get_course_database(API_URL,courseid):
+    response = requests.get(f"{API_URL}/courses/{courseid}")
+    if response.status_code == 200:
+        courseDB = response.json()
+        course=dict()
+        course["course Name"]=courseDB["course Name"]
+        course["Professor Name"]=courseDB["Professor Name"]
+        course["ID"]=courseDB["ID"]
+        course["number of credit hours"]=courseDB["number of credit hours"]
+        course["Number of students"]=courseDB["Number of students"]
+        course["Max Number of students"]=courseDB["Max Number of students"]
+        course["semester"]=courseDB["semester"]
+        print(f"Course Found: ID: {courseDB["ID"]}, course Name: {courseDB["course Name"]},Professor Name: {courseDB["Professor Name"]}, number of credit hours: {courseDB["number of credit hours"]}, Number of students : {courseDB["Number of students"]}, Max Number of students: {courseDB["Max Number of students"]}, semester : {courseDB["semester"]}")
+    else:
+        print("Course not found")
+
+def get_all_courses_database(API_URL):
+    response = requests.get(f"{API_URL}/courses")
+    if response.status_code == 200:
+        courseDB = response.json()
+        listCourses=[]
+        for course in  courseDB :
+            c=dict()
+            c["course Name"]=course["course Name"]
+            c["Professor Name"]=course["Professor Name"]
+            c["ID"]=course["ID"]
+            c["number of credit hours"]=course["number of credit hours"]
+            c["Number of students"]=course["Number of students"]
+            c["Max Number of students"]=course["Max Number of students"]
+            c["semester"]=course["semester"]
+            listCourses.append(c)
+        return listCourses
+    else:
+        print("Failed to retrieve courses") 
+        listCourses=[]
+        return listCourses      
+
+def delete_course_database(API_URL,courseid):
+    requests.delete(f"{API_URL}/courses/{courseid}")
+#------------------------------------------------------------------------------------------------------------------
 
 #check if course exists
 def checkCourseExist(list,id):
@@ -72,19 +127,23 @@ def createCourse():
     return course
 
 #Add a new course to the list of existing courses--good
-def addCourse(listCourse,course):
+def addCourse(listCourse,course,API_URL):
     listCourse.append(course)
+    send_course_database(API_URL,course["course Name"],course["Professor Name"],course["ID"],course["number of credit hours"],course["Number of students"],course["Max Number of students"],course["semester"])
     return listCourse
 
 #Remove a course  to the list of existing courses--good
-def deleteCourse(listCourse,id):
+def deleteCourse(listCourse,id,API_URL):
+    for c in listCourse :
+        if c.get("ID")==id :
+            delete_course_database(API_URL,id)
     for course in listCourse:
         if course.get("ID")==id :
             listCourse.remove(course)
     return listCourse
 
 #Modify a course info--good
-def modifyCourse(course):
+def modifyCourse(course,API_URL):
     print("What do you want to modify ?")
     print("1.Name")
     print("2.ID")
@@ -132,5 +191,5 @@ def modifyCourse(course):
             return
         case _:
             print("Option not supported")
-    
+    update_course_database(API_URL,course["course Name"],course["Professor Name"],course["ID"],course["number of credit hours"],course["Number of students"],course["Max Number of students"],course["semester"])    
     return
